@@ -14,4 +14,4 @@ First public release, extracted from a private automation that has posted daily 
   double-post.
 - Optional Buffer cross-post to TikTok and YouTube Shorts.
 - `reel-autopost` console script, `python -m reel_autopost`, offline test suite, CI on
-  Python 3.9 to 3.13.
+  Python 3.10 to 3.13.

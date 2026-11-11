@@ -7,7 +7,7 @@ Instagram's music library. No server, no hosting, no paid scheduler, no machine 
 Pure Python standard library.
 
 [![CI](https://github.com/A1ex3332/Superautoposter/actions/workflows/ci.yml/badge.svg)](https://github.com/A1ex3332/Superautoposter/actions/workflows/ci.yml)
-![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue)
+![Python 3.9+](https://img.shields.io/badge/python-3.10%2B-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
 ## Why this exists

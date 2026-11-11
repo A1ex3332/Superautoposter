@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "Serverless Instagram Reels scheduler that runs on GitHub Actions: drop videos in a folder, get them posted on a schedule with a library sound."
 readme = "README.md"
 license = { text = "MIT" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["instagram", "reels", "scheduler", "github-actions", "meta-graph-api", "social-media", "automation"]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -33,7 +33,7 @@ packages = ["reel_autopost"]
 
 [tool.ruff]
 line-length = 115
-target-version = "py39"
+target-version = "py310"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
