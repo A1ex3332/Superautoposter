@@ -1,0 +1,12 @@
+{
+  "ig_user_id": "",
+  "enabled": false,
+  "post_hours_utc": [17],
+  "default_hashtags": "#reels",
+  "audio_volume": 60,
+  "video_volume": 100,
+  "skip_sound_words": ["halloween", "christmas"],
+  "slot_queues": {},
+  "buffer_crosspost": false,
+  "ai_generated": true
+}

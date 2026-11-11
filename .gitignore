@@ -1,0 +1,17 @@
+# Never commit credentials
+.env
+*.token
+MY-KEYS*.txt
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# Local scratch
+*.log

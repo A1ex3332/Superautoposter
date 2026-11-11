@@ -1,0 +1,89 @@
+name: Autopost reel
+
+on:
+  schedule:
+    # Posting slots (UTC). Each account's config.json "post_hours_utc" picks which slots it uses.
+    # Odd minutes mean fewer GitHub delays. Add a line here to open a new slot.
+    - cron: "23 9 * * *"
+    - cron: "23 13 * * *"
+    - cron: "23 17 * * *"
+    - cron: "23 20 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "test = check token and list trending sounds, post = publish the next reel now"
+        required: true
+        default: test
+        type: choice
+        options: [test, post]
+      account:
+        description: "Account folder name under accounts/, or all"
+        required: true
+        default: all
+        type: string
+      slot:
+        description: "Posting slot hour in UTC (used by an outside timer; leave empty for a manual post)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autopost
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Post the next reel for each account
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          SCHEDULE: ${{ github.event.schedule || (github.event.inputs.slot != '' && format('23 {0} * * *', github.event.inputs.slot)) || '' }}
+          MODE: ${{ github.event.inputs.mode || 'post' }}
+          ACCOUNT: ${{ github.event.inputs.account || 'all' }}
+        run: |
+          # If the repo is public, Instagram fetches each video by URL, which keeps the sound attached.
+          if curl -sfo /dev/null "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_SHA}/README.md"; then
+            export VIDEO_URL_BASE="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_SHA}"
+            echo "Repo is public: videos will be fetched by URL."
+          else
+            echo "Repo is private: videos upload directly, and Instagram may drop the sound."
+          fi
+          echo "VIDEO_URL_BASE=${VIDEO_URL_BASE:-}" >> "$GITHUB_ENV"
+          python -m reel_autopost "$MODE" "$ACCOUNT"
+
+      - name: Cross-post to TikTok and YouTube through Buffer (optional)
+        if: always()
+        continue-on-error: true
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          MODE: ${{ github.event.inputs.mode || 'post' }}
+          ACCOUNT: ${{ github.event.inputs.account || 'all' }}
+        run: |
+          if [ "$MODE" != "post" ]; then python -m reel_autopost.crosspost test; exit 0; fi
+          for dir in accounts/*/; do
+            name=$(basename "$dir")
+            if [ "$name" = "example" ]; then continue; fi
+            if [ "$ACCOUNT" != "all" ] && [ "$ACCOUNT" != "$name" ]; then continue; fi
+            python -m reel_autopost.crosspost post "$name"
+          done
+
+      - name: Save posted lists
+        if: always() && (github.event.inputs.mode || 'post') == 'post'
+        run: |
+          git config user.name "autopost-bot"
+          git config user.email "autopost-bot@users.noreply.github.com"
+          git add accounts/*/posted.json accounts/*/buffer_posted.json 2>/dev/null || git add accounts/*/posted.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Autopost: record posted reels"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push

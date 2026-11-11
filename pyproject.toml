@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reel-autopost"
+version = "1.0.0"
+description = "Serverless Instagram Reels scheduler that runs on GitHub Actions: drop videos in a folder, get them posted on a schedule with a library sound."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+keywords = ["instagram", "reels", "scheduler", "github-actions", "meta-graph-api", "social-media", "automation"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Internet",
+  "Topic :: Multimedia :: Video",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.4"]
+
+[project.scripts]
+reel-autopost = "reel_autopost.poster:main"
+
+[tool.setuptools]
+packages = ["reel_autopost"]
+
+[tool.ruff]
+line-length = 115
+target-version = "py39"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B904"]
