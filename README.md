@@ -6,7 +6,7 @@ Drop videos into a folder, commit, and a cron workflow posts them one per slot w
 Instagram's music library. No server, no hosting, no paid scheduler, no machine that has to be on.
 Pure Python standard library.
 
-[![CI](https://github.com/A1ex3332/reel-autopost/actions/workflows/ci.yml/badge.svg)](https://github.com/A1ex3332/reel-autopost/actions/workflows/ci.yml)
+[![CI](https://github.com/A1ex3332/Superautoposter/actions/workflows/ci.yml/badge.svg)](https://github.com/A1ex3332/Superautoposter/actions/workflows/ci.yml)
 ![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 

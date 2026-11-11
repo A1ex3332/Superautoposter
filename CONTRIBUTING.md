@@ -13,7 +13,7 @@ Thanks for looking. Small, focused pull requests are the easiest to review.
 ## Dev setup
 
 ```bash
-git clone https://github.com/A1ex3332/reel-autopost
+git clone https://github.com/A1ex3332/Superautoposter
 cd reel-autopost
 pip install -e ".[dev]"
 pytest
